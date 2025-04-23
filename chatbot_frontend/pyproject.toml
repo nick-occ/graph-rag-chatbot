@@ -1,0 +1,21 @@
+[project]
+name = "chatbot_frontend"
+version = "0.1.0"
+description = "Chatbot frontend."
+authors = [
+    {name = "nick-occ",email = "nicholaso1980@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.12,<4.0"
+dependencies = [
+    "requests (>=2.32.3,<3.0.0)",
+    "streamlit (>=1.44.1,<2.0.0)"
+]
+
+[tool.poetry]
+packages = [{include = "chatbot_frontend", from = "src"}]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
