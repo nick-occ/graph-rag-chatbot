@@ -10,15 +10,14 @@ AGENT_MODEL = os.getenv("AGENT_MODEL")
 agent_prompt = hub.pull("hwchase17/openai-functions-agent")
 
 
-def extract_answer(query: str) -> str:
-    result = retrieval_chain.invoke({"input": query})
-    return json.dumps({"answer": result["answer"]})
+def agent_tool_wrapper(query: str) -> dict:
+    return retrieval_chain.invoke({"input": query})
 
 
 tools = [
     Tool(
         name="Articles",
-        func=extract_answer,
+        func=agent_tool_wrapper,
         description="""Useful in answering questions about the Urban Institute's 
         research that can be found in their articles page.
         """,

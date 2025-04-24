@@ -4,6 +4,10 @@ from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain.chains.retrieval import create_retrieval_chain
+from langchain_core.runnables import RunnableLambda, RunnableMap
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 NEO4J_URI = os.getenv("NEO4J_URI")
 NEO4J_USERNAME = os.getenv("NEO4J_USERNAME")
@@ -46,7 +50,20 @@ Question: {input}
 )
 combine_docs_chain = create_stuff_documents_chain(llm=llm, prompt=prompt)
 
-# create retrieval chain
-retrieval_chain = create_retrieval_chain(
-    retriever=retriever, combine_docs_chain=combine_docs_chain
-)
+
+def enhanced_retrieval_chain(input: dict):
+    docs = retriever.get_relevant_documents(input["input"])
+
+    logging.info("Input: %s", input["input"])
+    logging.info("Docs: %s", docs)
+
+    result = combine_docs_chain.invoke({"input": input["input"], "context": docs})
+    return {
+        "answer": result,
+        "context": [
+            {"page_content": doc.page_content, "metadata": doc.metadata} for doc in docs
+        ],
+    }
+
+
+retrieval_chain = RunnableLambda(enhanced_retrieval_chain)

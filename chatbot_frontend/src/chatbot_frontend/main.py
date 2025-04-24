@@ -46,12 +46,19 @@ if prompt := st.chat_input("What do you want to know?"):
 
             output_text = result.get("output", "No output returned.")
             explanation = result.get("intermediate_steps", [])
+            context = result.get("context", [])
 
         except requests.exceptions.RequestException as e:
             output_text = "Could not connect to the chatbot server. Please make sure it is running."
             explanation = str(e)
 
     st.chat_message("assistant").markdown(output_text)
+
+    article_ids = list(set({doc["metadata"]["article_id"] for doc in context}))
+
+    with st.status("Articles", state="complete"):
+        for article in article_ids:
+            st.markdown(f"- {article}")
 
     with st.status("How was this generated", state="complete"):
         for step in explanation:
