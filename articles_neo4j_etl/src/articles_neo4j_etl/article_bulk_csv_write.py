@@ -71,6 +71,8 @@ def load_article_graph_from_csv() -> None:
                     "article_id": row["article_id"],
                     "text": chunk,
                     "chunk_index": i,
+                    "url": row["article_url"],
+                    "title": row["title"],
                 }
             )
 
@@ -133,6 +135,8 @@ def load_article_graph_from_csv() -> None:
                         "id": c["id"],
                         "article_id": c["article_id"],
                         "chunk_index": c["chunk_index"],
+                        "title": c["title"],
+                        "url": c["url"],
                     },
                 )
                 for c in article_chunks_to_process

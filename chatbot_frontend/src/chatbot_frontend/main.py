@@ -54,11 +54,13 @@ if prompt := st.chat_input("What do you want to know?"):
 
     st.chat_message("assistant").markdown(output_text)
 
-    article_ids = list(set({doc["metadata"]["article_id"] for doc in context}))
+    articles = list(
+        {(doc["metadata"]["title"], doc["metadata"]["url"]) for doc in context}
+    )
 
     with st.status("Articles", state="complete"):
-        for article in article_ids:
-            st.markdown(f"- {article}")
+        for title, url in articles:
+            st.markdown(f"- [{title}]({url})")
 
     with st.status("How was this generated", state="complete"):
         for step in explanation:
