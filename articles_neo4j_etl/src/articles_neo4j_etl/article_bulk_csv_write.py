@@ -35,13 +35,16 @@ LOGGER = logging.getLogger(__name__)
 
 # function to get which articles are already chunked
 def get_distinct_article_ids(tx):
-    result = tx.run(
-        f"""
-        MATCH (c:{ARTICLE_CHUNK_NODE})
-        RETURN DISTINCT c.article_id AS article_id
-    """
-    )
-    return [record["article_id"] for record in result]
+    try:
+        result = tx.run(
+            f"""
+            MATCH (c:{ARTICLE_CHUNK_NODE})
+            RETURN DISTINCT c.article_id AS article_id
+        """
+        )
+        return [record["article_id"] for record in result]
+    except:
+        return []
 
 
 @retry(tries=100, delay=10)
