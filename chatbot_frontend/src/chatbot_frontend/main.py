@@ -4,7 +4,7 @@ import streamlit as st
 
 # CHATBOT_URL = os.getenv("CHATBOT_URL", "http://localhost:8000/article-rag-agent")
 
-CHATBOT_URL = "https://graph-rag-chatbot.onrender.com/"
+CHATBOT_URL = "https://graph-rag-chatbot.onrender.com/article-rag-agent"
 
 with st.sidebar:
     st.header("About")
