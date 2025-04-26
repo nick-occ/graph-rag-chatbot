@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: chatbot_api
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: uvicorn chatbot_api.main:app --host 0.0.0.0 --port 8000
