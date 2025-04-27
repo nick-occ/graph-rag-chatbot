@@ -10,11 +10,21 @@ with st.sidebar:
     st.header("About")
     st.markdown(
         """
-        This chatbot interfaces with a
-        [LangChain](https://python.langchain.com/docs/get_started/introduction)
-        agent designed to answer questions about the 
-        [Urban Institute Articles](https://ui.charlotte.edu/articles-research/).
-        The agent uses  retrieval-augment generation (RAG).
+        This chatbot interfaces with a Graph-Aware RAG (Retrieval-Augmented Generation) agent 
+        built in [LangChain](https://python.langchain.com/docs/get_started/introduction). The
+        agent is designed to answer questions about the 
+        [UNC Charlotte's Urban Institute Articles](https://ui.charlotte.edu/articles-research/).
+
+        Below are some examples of questions to ask.
+
+        - What did the results show about the student emergency fund project?
+        - Show me articles about COVID19?
+        - What work has been done around homelessness?
+        - What are corporate landlords and what research has been done about them?
+        - Give me information about QOL.
+        - Is there any research on arrests and the impacts?
+        - What is the history of income inequality in Charlotte?
+        - What work has been done to address income inequality.
         """
     )
 
