@@ -25,6 +25,10 @@ with st.sidebar:
         - Is there any research on arrests and the impacts?
         - What is the history of income inequality in Charlotte?
         - What work has been done to address income inequality.
+
+
+
+        Created by: Nick Occhipinti
         """
     )
 
