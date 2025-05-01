@@ -25,8 +25,7 @@ with st.sidebar:
         - Is there any research on arrests and the impacts?
         - What is the history of income inequality in Charlotte?
         - What work has been done to address income inequality.
-        - Provide me a summary of the work the UNC Charlotte Urban Institute does as a rap song?
-        - Provide the response in Spanish on the work the Urban Institute has done on income inequality?
+        - Provide the response in Spanish on the work the Urban Institute has done on income inequality.
 
 
 
