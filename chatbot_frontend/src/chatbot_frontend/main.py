@@ -2,9 +2,11 @@ import os
 import requests
 import streamlit as st
 
-# CHATBOT_URL = os.getenv("CHATBOT_URL", "http://localhost:8000/article-rag-agent")
+CHATBOT_URL = os.getenv(
+    "CHATBOT_URL", "https://graph-rag-chatbot.onrender.com/article-rag-agent"
+)
 
-CHATBOT_URL = "https://graph-rag-chatbot.onrender.com/article-rag-agent"
+# CHATBOT_URL = "https://graph-rag-chatbot.onrender.com/article-rag-agent"
 
 with st.sidebar:
     st.header("About")
@@ -13,7 +15,9 @@ with st.sidebar:
         This chatbot interfaces with a Graph-Aware RAG (Retrieval-Augmented Generation) agent 
         built in [LangChain](https://python.langchain.com/docs/get_started/introduction). The
         agent is designed to answer questions about the 
-        [UNC Charlotte's Urban Institute Articles](https://ui.charlotte.edu/articles-research/).
+        [UNC Charlotte's Urban Institute Articles](https://ui.charlotte.edu/articles-research/).  
+        
+        Click [here](https://docs.google.com/document/d/1GuOw0tkmVQX1aUQq6YyttKs8hxMUwvaeI-r3tF4aG1o/edit?usp=sharing) to read more about how the chatbot was created.
 
         Below are some examples of questions to ask.
 
