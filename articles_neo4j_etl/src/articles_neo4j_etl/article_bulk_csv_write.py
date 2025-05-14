@@ -21,7 +21,9 @@ embeddings = OpenAIEmbeddings()
 
 ARTICLE_NODE = "Article"
 ARTICLE_CHUNK_NODE = "ArticleChunk"
+YEAR_NODE = "Year"
 HAS_CHUNK_RELATIONSHIP = "HAS_CHUNK"
+PUBLISHED_RELATIONSHIP = "PUBLISHED_ON"
 ARTICLE_CHUNK_INDEX = "article_chunk_index"
 
 logging.basicConfig(
@@ -53,7 +55,7 @@ def load_article_graph_from_csv() -> None:
     articles = (
         pl.read_csv(ARTICLES_CSV_PATH, schema_overrides={"article_date": pl.Date})
         .filter(pl.col("article_text").is_not_null())
-        .with_columns(pl.col("article_date").cast(pl.String))
+        .with_columns(pl.col("article_date").cast(pl.Date))
     )
 
     LOGGER.info("Loaded articles dataset")
@@ -76,6 +78,7 @@ def load_article_graph_from_csv() -> None:
                     "chunk_index": i,
                     "url": row["article_url"],
                     "title": row["title"],
+                    "year": row["article_date"].year,
                 }
             )
 
@@ -108,7 +111,26 @@ def load_article_graph_from_csv() -> None:
     """
             session.run(_cypher, **a)
 
+            if a["date"]:
+                # article_date = datetime.strptime(a['date'],'%Y-%m-%d').date()
+                article_date = a["date"]
+                # print(article_date)
+                article_year = article_date.year
+                year_cypher = f"""merge (y:{YEAR_NODE} {{year: date($date).year}})"""
+
+                session.run(year_cypher, **a)
         LOGGER.info("Created Article nodes")
+
+        LOGGER.info("Created Year nodes")
+
+        published_rel_cypher = f"""MATCH (a:Article)
+        WITH a, date(a.date).year AS articleYear
+        MATCH (y:Year {{year: articleYear}})
+        MERGE (a)-[:PUBLISHED_ON {{date: date(a.date)}}]->(y)"""
+
+        session.run(published_rel_cypher)
+
+        LOGGER.info("Created PUBLISHED_ON relationship")
 
     # create constraint for article chunk node
     driver.execute_query(
@@ -140,6 +162,7 @@ def load_article_graph_from_csv() -> None:
                         "chunk_index": c["chunk_index"],
                         "title": c["title"],
                         "url": c["url"],
+                        "year": c["year"],
                     },
                 )
                 for c in article_chunks_to_process
@@ -167,6 +190,13 @@ def load_article_graph_from_csv() -> None:
                     **chunk,
                 )
             LOGGER.info("Created relationship between Article and Article Chunk")
+
+    with driver.session() as session:
+        session.run(
+            """MATCH (ac:ArticleChunk)<-[:HAS_CHUNK]-(a:Article)-[:PUBLISHED_ON]->(y:Year) SET ac.year = y.year"""
+        )
+
+        LOGGER.info("Set year on Article Chunk")
 
 
 if __name__ == "__main__":
