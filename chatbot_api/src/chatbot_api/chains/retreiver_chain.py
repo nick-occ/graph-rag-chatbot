@@ -31,7 +31,9 @@ vector_index = Neo4jVector.from_existing_graph(
 )
 
 # create a retriever
-retriever = vector_index.as_retriever(k=10)
+retriever = vector_index.as_retriever(
+    search_kwargs={"k": 10, "filter": {"year": {"$gte": 2015}}}
+)
 
 # create and llm
 llm = ChatOpenAI(model=QA_MODEL, temperature=0)
